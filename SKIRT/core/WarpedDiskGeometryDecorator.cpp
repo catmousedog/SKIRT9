@@ -24,12 +24,11 @@ double WarpedDiskGeometryDecorator::SigmaY() const
 
 double WarpedDiskGeometryDecorator::heightShift(double R, double phi) const
 {
-    // twisted
+    if (R > _maxRadius)
+        return 0;
+
     double r = sqrt(10 * R / _maxRadius);
     return 2 * _maxWarpHeight / M_PI * r * sin(r) * cos(phi - _phaseZeroPoint - r);
-
-    // twist-free
-    // double r = r / _maxRadius;
 }
 
 ////////////////////////////////////////////////////////////////////
