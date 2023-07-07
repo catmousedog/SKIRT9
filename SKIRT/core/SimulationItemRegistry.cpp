@@ -99,6 +99,7 @@
 #include "GrainPopulation.hpp"
 #include "HEALPixSkyInstrument.hpp"
 #include "HammerAitoffProjection.hpp"
+#include "HeightShiftDecorator.hpp"
 #include "HofmeisterPericlaseGrainComposition.hpp"
 #include "HollowRadialVectorField.hpp"
 #include "HyperboloidGeometry.hpp"
@@ -267,6 +268,7 @@
 #include "VoronoiMeshMedium.hpp"
 #include "VoronoiMeshSource.hpp"
 #include "VoronoiMeshSpatialGrid.hpp"
+#include "WarpedDiskGeometryDecorator.hpp"
 #include "WeingartnerDraineDustMix.hpp"
 #include "XRayAtomicGasMix.hpp"
 #include "ZubkoDustMix.hpp"
@@ -448,6 +450,8 @@ SimulationItemRegistry::SimulationItemRegistry(string version, string format)
     ItemRegistry::add<SpiralStructureGeometryDecorator>();
     ItemRegistry::add<ClumpyGeometryDecorator>();
     ItemRegistry::add<CombineGeometryDecorator>();
+    ItemRegistry::add<WarpedDiskGeometryDecorator>();
+    ItemRegistry::add<HeightShiftDecorator>();
 
     // smoothing kernels
     ItemRegistry::add<SmoothingKernel>();
