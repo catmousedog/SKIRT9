@@ -7,7 +7,6 @@
 #define HEIGHTSHIFTDECORATOR_HPP
 
 #include "GenGeometry.hpp"
-#include "AxGeometry.hpp"
 
 ////////////////////////////////////////////////////////////////////
 
@@ -18,7 +17,7 @@
 class HeightShiftDecorator : public GenGeometry
 {
     ITEM_ABSTRACT(HeightShiftDecorator, GenGeometry, "an abstract decorator that shifts any axisymmetric geometry")
-        PROPERTY_ITEM(geometry, AxGeometry, "the general geometry to be shifted")
+        PROPERTY_ITEM(geometry, Geometry, "the general geometry to be shifted")
     ITEM_END()
 
     //======================== Other Functions =======================
