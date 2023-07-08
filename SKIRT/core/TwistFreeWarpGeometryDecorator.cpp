@@ -3,64 +3,62 @@
 ////       © Astronomical Observatory, Ghent University         ////
 ///////////////////////////////////////////////////////////////// */
 
-#include "WarpedDiskGeometryDecorator.hpp"
+#include "TwistFreeWarpGeometryDecorator.hpp"
 #include "Random.hpp"
 
 //////////////////////////////////////////////////////////////////////
 
-double WarpedDiskGeometryDecorator::density(Position bfr) const
+double TwistFreeWarpGeometryDecorator::density(Position bfr) const
 {
     double R, phi, z;
     bfr.cylindrical(R, phi, z);
 
-    double h = 0.;
-    if (R <= _maxRadius) h = warpHeight(R, phi);
+    if (R > _maxRadius) return 0;
 
-    return _geometry->density(Position(R, phi, z - h, Position::CoordinateSystem::CYLINDRICAL));
+    return _geometry->density(Position(R, phi, z - warpHeight(R, phi), Position::CoordinateSystem::CYLINDRICAL));
 }
 
 ////////////////////////////////////////////////////////////////////
 
-Position WarpedDiskGeometryDecorator::generatePosition() const
+Position TwistFreeWarpGeometryDecorator::generatePosition() const
 {
-    Position bfr = _geometry->generatePosition();
-
+    Position bfr;
     double R, phi, z;
-    bfr.cylindrical(R, phi, z);
+    do
+    {
+        bfr = _geometry->generatePosition();
+        bfr.cylindrical(R, phi, z);
+    } while (R > _maxRadius);
 
-    double h = 0.;
-    if (R <= _maxRadius) h = warpHeight(R, phi);
-
-    return Position(R, phi, z + h, Position::CoordinateSystem::CYLINDRICAL);
+    return Position(R, phi, z + warpHeight(R, phi), Position::CoordinateSystem::CYLINDRICAL);
 }
 
 ////////////////////////////////////////////////////////////////////
 
-double WarpedDiskGeometryDecorator::SigmaX() const
+double TwistFreeWarpGeometryDecorator::SigmaX() const
 {
     return _geometry->SigmaX();
 }
 
 ////////////////////////////////////////////////////////////////////
 
-double WarpedDiskGeometryDecorator::SigmaY() const
+double TwistFreeWarpGeometryDecorator::SigmaY() const
 {
     return _geometry->SigmaY();
 }
 
 ////////////////////////////////////////////////////////////////////
 
-double WarpedDiskGeometryDecorator::SigmaZ() const
+double TwistFreeWarpGeometryDecorator::SigmaZ() const
 {
     return _geometry->SigmaZ();
 }
 
 ////////////////////////////////////////////////////////////////////
 
-double WarpedDiskGeometryDecorator::warpHeight(double R, double phi) const
+double TwistFreeWarpGeometryDecorator::warpHeight(double R, double phi) const
 {
-    double r = sqrt(10 * R / _maxRadius);
-    return 2 * _maxWarpHeight / M_PI * r * sin(r) * cos(phi - _phaseZeroPoint - r);
+    return _maxWarpHeight * pow(R / _maxRadius, _warpPower) * cos(phi);
 }
 
 ////////////////////////////////////////////////////////////////////

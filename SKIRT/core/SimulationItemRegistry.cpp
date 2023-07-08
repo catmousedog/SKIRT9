@@ -259,6 +259,8 @@
 #include "TrustGraphiteGrainComposition.hpp"
 #include "TrustNeutralPAHGrainComposition.hpp"
 #include "TrustSilicateGrainComposition.hpp"
+#include "TwistedWarpGeometryDecorator.hpp"
+#include "TwistFreeWarpGeometryDecorator.hpp"
 #include "UnidirectionalVectorField.hpp"
 #include "UniformBoxGeometry.hpp"
 #include "UniformSmoothingKernel.hpp"
@@ -448,6 +450,8 @@ SimulationItemRegistry::SimulationItemRegistry(string version, string format)
     ItemRegistry::add<SpiralStructureGeometryDecorator>();
     ItemRegistry::add<ClumpyGeometryDecorator>();
     ItemRegistry::add<CombineGeometryDecorator>();
+    ItemRegistry::add<TwistedWarpGeometryDecorator>();
+    ItemRegistry::add<TwistFreeWarpGeometryDecorator>();
 
     // smoothing kernels
     ItemRegistry::add<SmoothingKernel>();

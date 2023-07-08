@@ -3,22 +3,18 @@
 ////       © Astronomical Observatory, Ghent University         ////
 ///////////////////////////////////////////////////////////////// */
 
-#ifndef WARPEDDISKGEOMETRYDECORATOR_HPP
-#define WARPEDDISKGEOMETRYDECORATOR_HPP
+#ifndef TWISTFREEWARPGEOMETRYDECORATOR_HPP
+#define TWISTFREEWARPGEOMETRYDECORATOR_HPP
 
 #include "GenGeometry.hpp"
 
 ////////////////////////////////////////////////////////////////////
 
-/** The WarpedDiskGeometryDecorator class is a geometry decorator that warps any geometry. 
-    The warp only shifts the z-coordinate by \f[ h(R,\phi) = \frac{2H}{\pi} \sqrt{10\frac{R}{R_0}} 
-    \sin\left(\sqrt{10\frac{R}{R_0}}\right) \cos\left(\phi-\phi_0\right). \f] Here \f$H\f$ is the max warp height,
-    \f$R_0\f$ the max warp radius and \f$\phi_0\f$ the phase zero-point. Since this decorator only shifts the 
-    \f$z\f$-cooridnate the random point sampling and density evaluation comes down to just applying the warp 
-    to the points. */
-class WarpedDiskGeometryDecorator : public GenGeometry
+/** The TwistedWarpGeometryDecorator class is a geometry decorator that warps any geometry. 
+    The warp only shifts the z-coordinate by \f[ h(R,\phi) = H\left(\frac{R}{R_0}\right)^b \cos\left(\phi\right). \f] Here \f$H\f$ is the max warp height, \f$b\f$ is the radial warp power and \f$R_0\f$ the max radius, outside of which the density is 0. Since this decorator only shifts the \f$z\f$-cooridnate the random point sampling and density evaluation comes down to just applying the warp to the points. */
+class TwistFreeWarpGeometryDecorator : public GenGeometry
 {
-    ITEM_CONCRETE(WarpedDiskGeometryDecorator, GenGeometry, "A decorator that warps any disc-like geometry.")
+    ITEM_CONCRETE(TwistFreeWarpGeometryDecorator, GenGeometry, "a decorator that applies a twist-free warp to any geometry")
 
         PROPERTY_ITEM(geometry, Geometry, "the general geometry to be warped")
 
@@ -30,20 +26,16 @@ class WarpedDiskGeometryDecorator : public GenGeometry
         ATTRIBUTE_QUANTITY(maxWarpHeight, "length")
         ATTRIBUTE_MIN_VALUE(maxWarpHeight, "[0")
 
-        PROPERTY_DOUBLE(phaseZeroPoint, "the phase zero-point")
-        ATTRIBUTE_QUANTITY(phaseZeroPoint, "posangle")
-        ATTRIBUTE_MIN_VALUE(phaseZeroPoint, "[0 deg")
-        ATTRIBUTE_MAX_VALUE(phaseZeroPoint, "360 deg]")
-        ATTRIBUTE_DEFAULT_VALUE(phaseZeroPoint, "0 deg")
-        ATTRIBUTE_DISPLAYED_IF(phaseZeroPoint, "Level2")
-
+        PROPERTY_DOUBLE(warpPower, "the power of the radial warp")
+        ATTRIBUTE_MIN_VALUE(warpPower, "]0")
     ITEM_END()
 
     //======================== Other Functions =======================
 
 public:
     /** This function returns the density \f$\rho({\bf{r}})\f$ at the position \f${\bf{r}}\f$. It 
-        applies the inverse warp back to the original density distribution and evaluates the density. */
+        applies the inverse warp back to the original density distribution and evaluates the density. 
+        The density for \f$R\gt R_0\f$ is 0. */
     double density(Position bfr) const override;
 
     /** This function generates a random position from the geometry by
@@ -73,6 +65,7 @@ public:
 private:
     /** This private function implements the formula for the height of the warped disc \f$h(R,\phi)\f$. */
     double warpHeight(double R, double phi) const;
+
 };
 
 ////////////////////////////////////////////////////////////////////
