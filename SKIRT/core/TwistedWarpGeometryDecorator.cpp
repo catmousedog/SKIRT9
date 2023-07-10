@@ -59,7 +59,7 @@ double TwistedWarpGeometryDecorator::SigmaZ() const
 double TwistedWarpGeometryDecorator::warpHeight(double R, double phi) const
 {
     double r = sqrt(10 * R / _maxRadius);
-    return 2 * _maxWarpHeight / M_PI * r * sin(r) * cos(phi - r);
+    return 2 / (1.15846065471 * M_PI) * _maxWarpHeight * r * sin(r) * cos(phi - r);
 }
 
 ////////////////////////////////////////////////////////////////////
