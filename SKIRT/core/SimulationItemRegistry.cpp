@@ -206,6 +206,8 @@
 #include "Random.hpp"
 #include "ReadFits3DGeometry.hpp"
 #include "ReadFitsGeometry.hpp"
+#include "RedistributeGeometryDecorator.hpp"
+#include "RedistributePowerLawGeometry.hpp"
 #include "ResolutionBorderWavelengthGrid.hpp"
 #include "ResolutionWavelengthGrid.hpp"
 #include "RingGeometry.hpp"
@@ -452,6 +454,8 @@ SimulationItemRegistry::SimulationItemRegistry(string version, string format)
     ItemRegistry::add<CombineGeometryDecorator>();
     ItemRegistry::add<TwistedWarpGeometryDecorator>();
     ItemRegistry::add<TwistFreeWarpGeometryDecorator>();
+    ItemRegistry::add<RedistributeGeometryDecorator>();
+    ItemRegistry::add<SphericalPowerLawRedistributeGeometryDecorator>();
 
     // smoothing kernels
     ItemRegistry::add<SmoothingKernel>();
