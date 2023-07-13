@@ -11,71 +11,75 @@
 
 ////////////////////////////////////////////////////////////////////
 
-/** The abstract RedistributeGeometryDecorator class implements a decorator that adjusts another geometry
-    by setting the density equal to zero inside or outside a region defined in a subclass. Each
-    ClipGeometryDecorator subclass must implement the virtual functions dimension() and inside().
-    The decorator increases the density in the remaining region with a constant factor to ensure
-    that the total mass remains equal to one. The current implementation does not properly adjust
-    the surface densities along the coordinate axes for the mass taken away by the cavity. */
+/** The abstract RedistributeGeometryDecorator class implements a decorator that adjusts another
+    geometry by multiplying the density with some abstract weight function
+    \f[ \rho'({\bf{r}}) = n \rho({\bf{r}}) w({\bf{r}}). \f] There is also a clipping region where
+    the density is made zero. This can be used to cut out singularities of the weight function.
+    Each RedistributeGeometryDecorator subclass must implement the virtual functions dimension(),
+    weight(), maxWeight() and inside(). The decorator renormalizes the distribution
+    by using the importance sampling method from the original distribution. The random positions
+    are generated using the rejection method with the reference distribution the original density.
+    The current implementation does not properly adjust the surface densities along the coordinate
+    axes. */
 class RedistributeGeometryDecorator : public Geometry
 {
-    ITEM_ABSTRACT(RedistributeGeometryDecorator, Geometry, "a decorator that clips another geometry")
+    ITEM_ABSTRACT(RedistributeGeometryDecorator, Geometry, "a decorator that redistributes another geometry")
         ATTRIBUTE_TYPE_DISPLAYED_IF(RedistributeGeometryDecorator, "Level2")
 
-        PROPERTY_ITEM(geometry, Geometry, "the geometry to be ")
+        PROPERTY_ITEM(geometry, Geometry, "the geometry for which the density will be redistributed")
 
     ITEM_END()
 
     //============= Construction - Setup - Destruction =============
 
 protected:
-    /** This function estimates the fraction \f$\chi\f$ of the mass from the original model taken
-        away by the clipping. It samples the density of the geometry being decorated, and counts
-        the number of generated positions that fall in the removed region. This value is used to
-        renormalize the decorated density distribution to unity: the factor by which the original
-        density has to be multiplied is simply \f$1/(1-\chi)\f$. */
+    /** This function calculates the norm using the importance sampling method from the original
+        distribution. It also calculates the factor \f$c\f$ for the rejection method, which is just
+        the maxWeight(). */
     void setupSelfAfter() override;
 
     //======================== Other Functions =======================
 
 public:
-    /** This function returns the density \f$\rho({\bf{r}})\f$ at the position \f${\bf{r}}\f$. It
-        is zero in the removed region, and equal to the density of the geometry being decorated
-        elsewhere, after an adjustment is made to account for the clipping. */
+    /** This function returns the normalized density \f$n\rho({\bf{r}})w({\bf{r}})\f$ at the position
+        \f${\bf{r}}\f$. It is zero in the removed region determined by inside(). */
     double density(Position bfr) const override;
 
-    /** This function generates a random position from the geometry, by drawing a random point from
-        the three-dimensional probability density \f$p({\bf{r}})\, {\text{d}}{\bf{r}} =
-        \rho({\bf{r}})\, {\text{d}}{\bf{r}}\f$. It repeatedly calls the density() function for the
-        geometry being decorated until a position is returned that does not lie in the removed
-        region. */
+    /** This function generates a random position from the geometry using the rejection method. It draws
+        a random point from the probability density \f$\rho({\bf{r}})\f$, this point is
+        accepted if \f$t=\xi \frac{\max_{\bf{r}}{(w({\bf{r}}))}}{w({\bf{r}})}\le 1.\f$ */
     Position generatePosition() const override;
 
     /** This function returns the X-axis surface density, i.e. the integration of the density along
-        the entire X-axis, \f[ \Sigma_X = \int_{-\infty}^\infty \rho(x,0,0)\,{\text{d}}x. \f] It
-        returns the corresponding value of the geometry being decorated after re-normalization. */
+        the entire X-axis, \f[ \Sigma_X = \int_{-\infty}^\infty \rho(x,0,0)\,{\text{d}}x. \f] For a 
+        general geometry this decorator will not have an analytical solution for this integral. We use 
+        the X-axis surface density of the original dsitribution. */
     double SigmaX() const override;
 
     /** This function returns the Y-axis surface density, i.e. the integration of the density along
-        the entire Y-axis, \f[ \Sigma_Y = \int_{-\infty}^\infty \rho(0,y,0)\,{\text{d}}y. \f] It
-        returns the corresponding value of the geometry being decorated after re-normalization. */
+        the entire Y-axis, \f[ \Sigma_Y = \int_{-\infty}^\infty \rho(y,0,0)\,{\text{d}}y. \f] For a 
+        general geometry this decorator will not have an analytical solution for this integral. We use 
+        the Y-axis surface density of the original dsitribution. */
     double SigmaY() const override;
 
     /** This function returns the Z-axis surface density, i.e. the integration of the density along
-        the entire Z-axis, \f[ \Sigma_Z = \int_{-\infty}^\infty \rho(0,0,z)\,{\text{d}}z. \f] It
-        returns the corresponding value of the geometry being decorated after re-normalization. */
+        the entire Z-axis, \f[ \Sigma_Z = \int_{-\infty}^\infty \rho(Z,0,0)\,{\text{d}}z. \f] For a 
+        general geometry this decorator will not have an analytical solution for this integral. We use 
+        the Z-axis surface density of the original dsitribution. */
     double SigmaZ() const override;
 
 protected:
-    /** This pure virtual function, to be implemented by a subclass, returns true if the specified
-        position is inside the boundary defined by the subclass, i.e. the point is in the region
-        that would be carved away when creating a cavity, or in the region that would be retained
-        when cropping. */
+    /** This pure virtual function, to be implemented by a subclass, gives the weight function's value
+        at a given position. This function does not need to be normalized. */
     virtual double weight(Position bfr) const = 0;
 
+    /** This pure virtual function, to be implemented by a subclass, gives the maximum value of the weight
+        function. This value is used in the rejection method. */
     virtual double maxWeight() const = 0;
 
-    virtual bool inside(Position bfr) const;
+    /** This pure virtual function determines if a given position is inside the decorated distribution. If 
+        not the density is zero. */
+    virtual bool inside(Position bfr) const = 0;
 
     //======================== Data Members ========================
 

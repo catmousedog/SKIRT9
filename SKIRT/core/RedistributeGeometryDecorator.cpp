@@ -45,9 +45,6 @@ double RedistributeGeometryDecorator::density(Position bfr) const
 
 Position RedistributeGeometryDecorator::generatePosition() const
 {
-    // can also use rejection: w(x) * max(r(x)) but would need to know max(r)
-    // this would allow for divergent w(x) such as ~ x^-p with p < 1
-
     while (true)
     {
         Position bfr = _geometry->generatePosition();
@@ -78,13 +75,6 @@ double RedistributeGeometryDecorator::SigmaY() const
 double RedistributeGeometryDecorator::SigmaZ() const
 {
     return _geometry->SigmaZ();
-}
-
-////////////////////////////////////////////////////////////////////
-
-bool RedistributeGeometryDecorator::inside(Position bfr) const
-{
-    return true;
 }
 
 ////////////////////////////////////////////////////////////////////

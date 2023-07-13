@@ -10,7 +10,7 @@
 
 int SphericalPowerLawRedistributeGeometryDecorator::dimension() const
 {
-    return max(geometry()->dimension(), 2);
+    return geometry()->dimension();
 }
 
 ////////////////////////////////////////////////////////////////////
