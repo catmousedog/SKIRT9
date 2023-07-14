@@ -5,7 +5,6 @@
 ///////////////////////////////////////////////////////////////// */
 
 #include "RedistributeGeometryDecorator.hpp"
-#include "FatalError.hpp"
 #include "Random.hpp"
 
 ////////////////////////////////////////////////////////////////////
@@ -14,31 +13,15 @@ void RedistributeGeometryDecorator::setupSelfAfter()
 {
     Geometry::setupSelfAfter();
 
-    int Nsamples = 10000, Ninside = 0;
-    double sum = 0.;
-    for (int k = 0; k < Nsamples; k++)
-    {
-        Position bfr = geometry()->generatePosition();
-        if (inside(bfr))
-        {
-            Ninside++;
-            sum += weight(bfr);
-        }
-    }
-    if (Ninside / (double)Nsamples < 0.1)
-        throw FATALERROR("Redistribute decorator minRadius removes more than 90% of the original mass");
-    _norm = Nsamples / sum;
-    _c = maxWeight();
+    _norm = norm();
+    _maxWeight = maxWeight();
 }
 
 //////////////////////////////////////////////////////////////////////
 
 double RedistributeGeometryDecorator::density(Position bfr) const
 {
-    if (inside(bfr))
-        return _norm * _geometry->density(bfr) * weight(bfr);
-    else
-        return 0;
+    return _norm * _geometry->density(bfr) * weight(bfr);
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -48,11 +31,8 @@ Position RedistributeGeometryDecorator::generatePosition() const
     while (true)
     {
         Position bfr = _geometry->generatePosition();
-        if (inside(bfr))
-        {
-            double t = random()->uniform() * _c / weight(bfr);
-            if (t <= 1) return bfr;
-        }
+        double t = random()->uniform() * _maxWeight / weight(bfr);
+        if (t <= 1) return bfr;
     }
 }
 

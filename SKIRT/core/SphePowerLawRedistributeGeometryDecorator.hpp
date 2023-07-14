@@ -4,21 +4,21 @@
 ////       © Astronomical Observatory, Ghent University         ////
 ///////////////////////////////////////////////////////////////// */
 
-#ifndef REDISTRIBUTEPOWERLAWGEOMETRY_HPP
-#define REDISTRIBUTEPOWERLAWGEOMETRY_HPP
+#ifndef SPHEPOWERLAWREDISTRIBUTEGEOMETRYDECORATOR_HPP
+#define SPHEPOWERLAWREDISTRIBUTEGEOMETRYDECORATOR_HPP
 
-#include "RedistributeGeometryDecorator.hpp"
+#include "SpheRedistributeGeometryDecorator.hpp"
 
 ////////////////////////////////////////////////////////////////////
 
-/** The abstract SphericalPowerLawRedistributeGeometryDecorator class implements a decorator that 
+/** The abstract SphePowerLawRedistributeGeometryDecorator class implements a decorator that 
     adjusts another geometry by multiplying the density with a power law weight function 
     \f[ \rho'(r, \theta, \phi) = n \rho(r, \theta, \phi) r^{-p}. \f] There is also a spherical
     clipping region around the origin determined by a radius \f$r_0 \gt 0\f$ where the density is made 
     zero to cut out the singularity. */
-class SphericalPowerLawRedistributeGeometryDecorator : public RedistributeGeometryDecorator
+class SphePowerLawRedistributeGeometryDecorator : public SpheRedistributeGeometryDecorator
 {
-    ITEM_CONCRETE(SphericalPowerLawRedistributeGeometryDecorator, RedistributeGeometryDecorator,
+    ITEM_CONCRETE(SphePowerLawRedistributeGeometryDecorator, SpheRedistributeGeometryDecorator,
                   "a decorator that redistributes another geometry with a spherical power law")
 
         PROPERTY_DOUBLE(power, "the negative power of the weight function")
@@ -31,21 +31,13 @@ class SphericalPowerLawRedistributeGeometryDecorator : public RedistributeGeomet
     ITEM_END()
 
     //======================== Other Functions =======================
-public:
-    /** The dimension of this decorator is the dimension of the original geometry. */
-    int dimension() const override;
-
 protected:
     /** The weight function is the power law: \f$r^{-p}\f$. */
-    double weight(Position bfr) const override;
+    double weight(double r) const override;
 
     /** The max weight is used in the rejection method and is equal to \f$r_0^{-p}\f$ 
         with \f$r_0\gt 0\f$ the radius of the clipping. */
     double maxWeight() const override;
-
-    /** Returns true if inside the clipped distribution. In this case that is for any 
-        \f$r \ge r_0\f$ with \f$r_0 \gt 0\f$ the clipping sphere centered on the origin. */
-    bool inside(Position bfr) const override;
 };
 
 ////////////////////////////////////////////////////////////////////

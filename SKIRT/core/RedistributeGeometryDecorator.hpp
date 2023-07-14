@@ -13,14 +13,12 @@
 
 /** The abstract RedistributeGeometryDecorator class implements a decorator that adjusts another
     geometry by multiplying the density with some abstract weight function
-    \f[ \rho'({\bf{r}}) = n \rho({\bf{r}}) w({\bf{r}}). \f] There is also a clipping region where
-    the density is made zero. This can be used to cut out singularities of the weight function.
-    Each RedistributeGeometryDecorator subclass must implement the virtual functions dimension(),
-    weight(), maxWeight() and inside(). The decorator renormalizes the distribution
-    by using the importance sampling method from the original distribution. The random positions
-    are generated using the rejection method with the reference distribution the original density.
-    The current implementation does not properly adjust the surface densities along the coordinate
-    axes. */
+    \f[ \rho'({\bf{r}}) = n \rho({\bf{r}}) w({\bf{r}}). \f] Each RedistributeGeometryDecorator 
+    subclass must implement the virtual functions dimension(), weight(), maxWeight() and inside().
+    The decorator renormalizes the distribution by using the importance sampling method from the
+    original distribution. The random positions are generated using the rejection method with the
+    reference distribution the original density. The current implementation does not properly 
+    adjust the surface densities along the coordinate axes. */
 class RedistributeGeometryDecorator : public Geometry
 {
     ITEM_ABSTRACT(RedistributeGeometryDecorator, Geometry, "a decorator that redistributes another geometry")
@@ -42,7 +40,7 @@ protected:
 
 public:
     /** This function returns the normalized density \f$n\rho({\bf{r}})w({\bf{r}})\f$ at the position
-        \f${\bf{r}}\f$. It is zero in the removed region determined by inside(). */
+        \f${\bf{r}}\f$. */
     double density(Position bfr) const override;
 
     /** This function generates a random position from the geometry using the rejection method. It draws
@@ -77,16 +75,16 @@ protected:
         function. This value is used in the rejection method. */
     virtual double maxWeight() const = 0;
 
-    /** This pure virtual function determines if a given position is inside the decorated distribution. If 
-        not the density is zero. */
-    virtual bool inside(Position bfr) const = 0;
+    /** This pure virtual function, to be implemented by a subclass, gives the norm
+        \f$n\f$ of the new density distribution \f$n\rho({\bf{r}})w({\bf{r}})\f$. */
+    virtual double norm() const = 0;
 
     //======================== Data Members ========================
 
 private:
     // values initialized during setup
     double _norm{0.};
-    double _c;
+    double _maxWeight;
 };
 
 ////////////////////////////////////////////////////////////////////

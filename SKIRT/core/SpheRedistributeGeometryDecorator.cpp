@@ -4,34 +4,34 @@
 ////       © Astronomical Observatory, Ghent University         ////
 ///////////////////////////////////////////////////////////////// */
 
-#include "RedistributePowerLawGeometry.hpp"
+#include "SpheRedistributeGeometryDecorator.hpp"
 
 ////////////////////////////////////////////////////////////////////
 
-int SphericalPowerLawRedistributeGeometryDecorator::dimension() const
+int SpheRedistributeGeometryDecorator::dimension() const
 {
     return geometry()->dimension();
 }
 
 ////////////////////////////////////////////////////////////////////
 
-double SphericalPowerLawRedistributeGeometryDecorator::weight(Position bfr) const
+double SpheRedistributeGeometryDecorator::weight(Position bfr) const
 {
-    return pow(bfr.radius(), -_power);
+    return weight(bfr.radius());
 }
 
 ////////////////////////////////////////////////////////////////////
 
-double SphericalPowerLawRedistributeGeometryDecorator::maxWeight() const
+double SpheRedistributeGeometryDecorator::norm() const
 {
-    return weight(Position(_minRadius, 0, 0, Position::CoordinateSystem::SPHERICAL));
-}
-
-////////////////////////////////////////////////////////////////////
-
-bool SphericalPowerLawRedistributeGeometryDecorator::inside(Position bfr) const
-{
-    return bfr.radius() >= _minRadius;
+    int Nsamples = 10000;
+    double sum = 0.;
+    for (int k = 0; k < Nsamples; k++)
+    {
+        double r = geometry()->generatePosition().radius();
+        sum += weight(r) * r;
+    }
+    return Nsamples / (4 * M_PI * sum);
 }
 
 ////////////////////////////////////////////////////////////////////
