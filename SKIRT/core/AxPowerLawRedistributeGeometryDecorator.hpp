@@ -22,6 +22,7 @@ class AxPowerLawRedistributeGeometryDecorator : public RedistributeGeometryDecor
 {
     ITEM_CONCRETE(AxPowerLawRedistributeGeometryDecorator, RedistributeGeometryDecorator,
                   "a decorator that redistributes another geometry with an axial power law")
+        ATTRIBUTE_TYPE_INSERT(AxPowerLawRedistributeGeometryDecorator, "Dimension2")
 
         PROPERTY_DOUBLE(RExponent, "the negative power of the radial part of the weight function")
         ATTRIBUTE_MIN_VALUE(RExponent, "[0")
@@ -43,16 +44,17 @@ class AxPowerLawRedistributeGeometryDecorator : public RedistributeGeometryDecor
 
     //======================== Other Functions =======================
 public:
-    /** The dimension of the geometry after applying the decorator cannot change and is
-        thus the dimension of the original geometry. */
+    /** The dimension of the geometry after applying the decorator can only change
+        spherical geometries into axially symmetric, otherwise it doesn't change the
+        dimension. */
     int dimension() const override;
 
 protected:
-    /** The weight function is the power law: \f$r^{-p}\f$. */
+    /** The weight function is the exponential: \f$R^{-p_R}z^{-p_z}\f$. */
     double weight(Position bfr) const override;
 
-    /** The max weight is used in the rejection method and is equal to \f$r_0^{-p}\f$ 
-        with \f$r_0\gt 0\f$ the radius of the clipping. */
+    /** The max weight is used in the rejection method and is equal to 
+         \f$R_0^{-p_R}z_0^{-p_z}\f$. */
     double maxWeight() const override;
 
     //======================== Data Members ========================

@@ -19,6 +19,7 @@
 #include "AnnulusGeometry.hpp"
 #include "AtPositionsForm.hpp"
 #include "AxPowerLawRedistributeGeometryDecorator.hpp"
+#include "AxExpRedistributeGeometryDecorator.hpp"
 #include "BandLuminosityNormalization.hpp"
 #include "BegemannPorousAluminaGrainComposition.hpp"
 #include "BlackBodySED.hpp"
@@ -458,6 +459,7 @@ SimulationItemRegistry::SimulationItemRegistry(string version, string format)
     ItemRegistry::add<RedistributeGeometryDecorator>();
     ItemRegistry::add<SphePowerLawRedistributeGeometryDecorator>();
     ItemRegistry::add<AxPowerLawRedistributeGeometryDecorator>();
+    ItemRegistry::add<AxExpRedistributeGeometryDecorator>();
 
     // smoothing kernels
     ItemRegistry::add<SmoothingKernel>();
