@@ -231,6 +231,7 @@
 #include "SpatialGridPlotProbe.hpp"
 #include "SpatialGridSourceDensityProbe.hpp"
 #include "SpecificLuminosityNormalization.hpp"
+#include "SpheExpRedistributeGeometryDecorator.hpp"
 #include "Sphere1DSpatialGrid.hpp"
 #include "Sphere2DSpatialGrid.hpp"
 #include "SphePowerLawRedistributeGeometryDecorator.hpp"
@@ -460,6 +461,7 @@ SimulationItemRegistry::SimulationItemRegistry(string version, string format)
     ItemRegistry::add<SphePowerLawRedistributeGeometryDecorator>();
     ItemRegistry::add<AxPowerLawRedistributeGeometryDecorator>();
     ItemRegistry::add<AxExpRedistributeGeometryDecorator>();
+    ItemRegistry::add<SpheExpRedistributeGeometryDecorator>();
 
     // smoothing kernels
     ItemRegistry::add<SmoothingKernel>();

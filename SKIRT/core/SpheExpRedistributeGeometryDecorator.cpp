@@ -4,27 +4,26 @@
 ////       © Astronomical Observatory, Ghent University         ////
 ///////////////////////////////////////////////////////////////// */
 
-#include "AxExpRedistributeGeometryDecorator.hpp"
+#include "SpheExpRedistributeGeometryDecorator.hpp"
 
 ////////////////////////////////////////////////////////////////////
 
-int AxExpRedistributeGeometryDecorator::dimension() const
+int SpheExpRedistributeGeometryDecorator::dimension() const
 {
-    return max(2, geometry()->dimension());
+    return geometry()->dimension();
 }
 
 ////////////////////////////////////////////////////////////////////
 
-double AxExpRedistributeGeometryDecorator::weight(Position bfr) const
+double SpheExpRedistributeGeometryDecorator::weight(Position bfr) const
 {
-    double R = bfr.cylRadius();
-    double z = abs(bfr.z());
-    return exp(-R / _LR - z / _Lz);
+    double r = bfr.radius();
+    return exp(r/_rScaleLength);
 }
 
 ////////////////////////////////////////////////////////////////////
 
-double AxExpRedistributeGeometryDecorator::maxWeight() const
+double SpheExpRedistributeGeometryDecorator::maxWeight() const
 {
     return 1;
 }
