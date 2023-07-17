@@ -231,7 +231,6 @@
 #include "SpecificLuminosityNormalization.hpp"
 #include "Sphere1DSpatialGrid.hpp"
 #include "Sphere2DSpatialGrid.hpp"
-#include "SpheRedistributeGeometryDecorator.hpp"
 #include "SphePowerLawRedistributeGeometryDecorator.hpp"
 #include "SphericalBackgroundSource.hpp"
 #include "SphericalClipGeometryDecorator.hpp"
@@ -456,7 +455,6 @@ SimulationItemRegistry::SimulationItemRegistry(string version, string format)
     ItemRegistry::add<TwistedWarpGeometryDecorator>();
     ItemRegistry::add<TwistFreeWarpGeometryDecorator>();
     ItemRegistry::add<RedistributeGeometryDecorator>();
-    ItemRegistry::add<SpheRedistributeGeometryDecorator>();
     ItemRegistry::add<SphePowerLawRedistributeGeometryDecorator>();
 
     // smoothing kernels

@@ -7,22 +7,22 @@
 #ifndef SPHEPOWERLAWREDISTRIBUTEGEOMETRYDECORATOR_HPP
 #define SPHEPOWERLAWREDISTRIBUTEGEOMETRYDECORATOR_HPP
 
-#include "SpheRedistributeGeometryDecorator.hpp"
+#include "RedistributeGeometryDecorator.hpp"
 
 ////////////////////////////////////////////////////////////////////
 
 /** The abstract SphePowerLawRedistributeGeometryDecorator class implements a decorator that 
-    adjusts another geometry by multiplying the density with a power law weight function 
+    adjusts another geometry by multiplying the density with a spherical power law weight function 
     \f[ \rho'(r, \theta, \phi) = n \rho(r, \theta, \phi) r^{-p}. \f] There is also a spherical
     clipping region around the origin determined by a radius \f$r_0 \gt 0\f$ where the density is made 
     zero to cut out the singularity. */
-class SphePowerLawRedistributeGeometryDecorator : public SpheRedistributeGeometryDecorator
+class SphePowerLawRedistributeGeometryDecorator : public RedistributeGeometryDecorator
 {
-    ITEM_CONCRETE(SphePowerLawRedistributeGeometryDecorator, SpheRedistributeGeometryDecorator,
+    ITEM_CONCRETE(SphePowerLawRedistributeGeometryDecorator, RedistributeGeometryDecorator,
                   "a decorator that redistributes another geometry with a spherical power law")
 
-        PROPERTY_DOUBLE(power, "the negative power of the weight function")
-        ATTRIBUTE_MIN_VALUE(power, "]0")
+        PROPERTY_DOUBLE(exponent, "the negative power of the weight function")
+        ATTRIBUTE_MIN_VALUE(exponent, "]0")
 
         PROPERTY_DOUBLE(minRadius, "the radius of the clipping sphere")
         ATTRIBUTE_QUANTITY(minRadius, "length")
@@ -31,9 +31,14 @@ class SphePowerLawRedistributeGeometryDecorator : public SpheRedistributeGeometr
     ITEM_END()
 
     //======================== Other Functions =======================
+public:
+    /** The dimension of the geometry after applying the decorator cannot change and is
+        thus the dimension of the original geometry. */
+    int dimension() const override;
+
 protected:
     /** The weight function is the power law: \f$r^{-p}\f$. */
-    double weight(double r) const override;
+    double weight(Position bfr) const override;
 
     /** The max weight is used in the rejection method and is equal to \f$r_0^{-p}\f$ 
         with \f$r_0\gt 0\f$ the radius of the clipping. */

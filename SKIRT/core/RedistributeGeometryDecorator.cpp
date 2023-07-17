@@ -58,3 +58,17 @@ double RedistributeGeometryDecorator::SigmaZ() const
 }
 
 ////////////////////////////////////////////////////////////////////
+
+double RedistributeGeometryDecorator::norm() const
+{
+    int Nsamples = 10000;
+    double sum = 0.;
+    for (int k = 0; k < Nsamples; k++)
+    {
+        Position bfr = _geometry->generatePosition();
+        sum += weight(bfr);
+    }
+    return Nsamples / sum;
+}
+
+////////////////////////////////////////////////////////////////////

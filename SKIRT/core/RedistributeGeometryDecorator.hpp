@@ -75,9 +75,10 @@ protected:
         function. This value is used in the rejection method. */
     virtual double maxWeight() const = 0;
 
+private:
     /** This pure virtual function, to be implemented by a subclass, gives the norm
         \f$n\f$ of the new density distribution \f$n\rho({\bf{r}})w({\bf{r}})\f$. */
-    virtual double norm() const = 0;
+    double norm() const;
 
     //======================== Data Members ========================
 
