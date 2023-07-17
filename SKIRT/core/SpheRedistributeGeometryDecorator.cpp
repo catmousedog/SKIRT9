@@ -5,33 +5,49 @@
 ///////////////////////////////////////////////////////////////// */
 
 #include "SpheRedistributeGeometryDecorator.hpp"
+#include "Random.hpp"
 
 ////////////////////////////////////////////////////////////////////
 
-int SpheRedistributeGeometryDecorator::dimension() const
+void SpheRedistributeGeometryDecorator::setupSelfAfter()
 {
-    return geometry()->dimension();
-}
+    SpheGeometry::setupSelfAfter();
 
-////////////////////////////////////////////////////////////////////
-
-double SpheRedistributeGeometryDecorator::weight(Position bfr) const
-{
-    return weight(bfr.radius());
-}
-
-////////////////////////////////////////////////////////////////////
-
-double SpheRedistributeGeometryDecorator::norm() const
-{
     int Nsamples = 10000;
     double sum = 0.;
     for (int k = 0; k < Nsamples; k++)
     {
-        double r = geometry()->generatePosition().radius();
-        sum += weight(r) * r;
+        double r = _geometry->randomRadius();
+        sum += weight(r);
     }
-    return Nsamples / (4 * M_PI * sum);
+    _norm = Nsamples / sum;
+    _maxWeight = maxWeight();
+}
+
+////////////////////////////////////////////////////////////////////
+
+double SpheRedistributeGeometryDecorator::density(double r) const
+{
+    return _norm * _geometry->density(r) * weight(r);
+}
+
+////////////////////////////////////////////////////////////////////
+
+double SpheRedistributeGeometryDecorator::randomRadius() const
+{
+    while (true)
+    {
+        double r = _geometry->randomRadius();
+        double t = random()->uniform() * _maxWeight / weight(r);
+        if (t <= 1) return r;
+    }
+}
+
+////////////////////////////////////////////////////////////////////
+
+double SpheRedistributeGeometryDecorator::Sigmar() const
+{
+    return _geometry->Sigmar();
 }
 
 ////////////////////////////////////////////////////////////////////

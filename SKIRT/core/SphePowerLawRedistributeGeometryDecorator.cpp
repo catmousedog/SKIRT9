@@ -11,7 +11,7 @@
 double SphePowerLawRedistributeGeometryDecorator::weight(double r) const
 {
     if (r < _minRadius) return 0;
-    return pow(r, -_power);
+    return pow(r, -_exponent);
 }
 
 ////////////////////////////////////////////////////////////////////

@@ -12,17 +12,17 @@
 ////////////////////////////////////////////////////////////////////
 
 /** The abstract SphePowerLawRedistributeGeometryDecorator class implements a decorator that 
-    adjusts another geometry by multiplying the density with a power law weight function 
-    \f[ \rho'(r, \theta, \phi) = n \rho(r, \theta, \phi) r^{-p}. \f] There is also a spherical
-    clipping region around the origin determined by a radius \f$r_0 \gt 0\f$ where the density is made 
-    zero to cut out the singularity. */
+    adjusts a spherical geometry by multiplying the density with a spherical power law weight
+    function \f[ \rho'(r, \theta, \phi) = n \rho(r, \theta, \phi) r^{-p}. \f] There is also a
+    spherical clipping region around the origin determined by a radius \f$r_0 \gt 0\f$ where
+    the density is made zero to cut out the singularity. */
 class SphePowerLawRedistributeGeometryDecorator : public SpheRedistributeGeometryDecorator
 {
     ITEM_CONCRETE(SphePowerLawRedistributeGeometryDecorator, SpheRedistributeGeometryDecorator,
                   "a decorator that redistributes another geometry with a spherical power law")
 
-        PROPERTY_DOUBLE(power, "the negative power of the weight function")
-        ATTRIBUTE_MIN_VALUE(power, "]0")
+        PROPERTY_DOUBLE(exponent, "the negative exponent of the weight function")
+        ATTRIBUTE_MIN_VALUE(exponent, "]0")
 
         PROPERTY_DOUBLE(minRadius, "the radius of the clipping sphere")
         ATTRIBUTE_QUANTITY(minRadius, "length")
