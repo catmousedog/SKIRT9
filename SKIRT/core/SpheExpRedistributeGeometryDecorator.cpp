@@ -18,7 +18,7 @@ int SpheExpRedistributeGeometryDecorator::dimension() const
 double SpheExpRedistributeGeometryDecorator::weight(Position bfr) const
 {
     double r = bfr.radius();
-    return exp(r/_rScaleLength);
+    return exp(-r/_rScaleLength);
 }
 
 ////////////////////////////////////////////////////////////////////
