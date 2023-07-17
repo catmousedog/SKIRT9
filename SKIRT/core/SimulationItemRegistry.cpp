@@ -206,6 +206,7 @@
 #include "Random.hpp"
 #include "ReadFits3DGeometry.hpp"
 #include "ReadFitsGeometry.hpp"
+#include "RedistributeGeometryDecorator.hpp"
 #include "ResolutionBorderWavelengthGrid.hpp"
 #include "ResolutionWavelengthGrid.hpp"
 #include "RingGeometry.hpp"
@@ -230,7 +231,6 @@
 #include "SpecificLuminosityNormalization.hpp"
 #include "Sphere1DSpatialGrid.hpp"
 #include "Sphere2DSpatialGrid.hpp"
-#include "SpheRedistributeGeometryDecorator.hpp"
 #include "SphePowerLawRedistributeGeometryDecorator.hpp"
 #include "SphericalBackgroundSource.hpp"
 #include "SphericalClipGeometryDecorator.hpp"
@@ -454,7 +454,7 @@ SimulationItemRegistry::SimulationItemRegistry(string version, string format)
     ItemRegistry::add<CombineGeometryDecorator>();
     ItemRegistry::add<TwistedWarpGeometryDecorator>();
     ItemRegistry::add<TwistFreeWarpGeometryDecorator>();
-    ItemRegistry::add<SpheRedistributeGeometryDecorator>();
+    ItemRegistry::add<RedistributeGeometryDecorator>();
     ItemRegistry::add<SphePowerLawRedistributeGeometryDecorator>();
 
     // smoothing kernels
