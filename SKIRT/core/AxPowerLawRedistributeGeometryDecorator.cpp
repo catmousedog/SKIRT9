@@ -4,29 +4,30 @@
 ////       © Astronomical Observatory, Ghent University         ////
 ///////////////////////////////////////////////////////////////// */
 
-#include "SphePowerLawRedistributeGeometryDecorator.hpp"
+#include "AxPowerLawRedistributeGeometryDecorator.hpp"
 
 ////////////////////////////////////////////////////////////////////
 
-int SphePowerLawRedistributeGeometryDecorator::dimension() const
+int AxPowerLawRedistributeGeometryDecorator::dimension() const
 {
     return geometry()->dimension();
 }
 
 ////////////////////////////////////////////////////////////////////
 
-double SphePowerLawRedistributeGeometryDecorator::weight(Position bfr) const
+double AxPowerLawRedistributeGeometryDecorator::weight(Position bfr) const
 {
-    double r = bfr.radius();
-    if (r < _minRadius) return 0;
-    return pow(r, -_exponent);
+    double R = bfr.cylRadius();
+    double z = abs(bfr.z());
+    if (z < _z0 || abs(R) < _R0) return 0;
+    return pow(R, -_pR) * pow(z, -_pz);
 }
 
 ////////////////////////////////////////////////////////////////////
 
-double SphePowerLawRedistributeGeometryDecorator::maxWeight() const
+double AxPowerLawRedistributeGeometryDecorator::maxWeight() const
 {
-    return weight(Position(_minRadius, 0, 0));
+    return weight(Position(_R0, 0, _z0, Position::CoordinateSystem::CYLINDRICAL));
 }
 
 ////////////////////////////////////////////////////////////////////
