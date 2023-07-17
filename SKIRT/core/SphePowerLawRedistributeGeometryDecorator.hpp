@@ -11,11 +11,11 @@
 
 ////////////////////////////////////////////////////////////////////
 
-/** The abstract SphePowerLawRedistributeGeometryDecorator class implements a decorator that 
-    adjusts another geometry by multiplying the density with a spherical power law weight function 
-    \f[ \rho'(r, \theta, \phi) = n \rho(r, \theta, \phi) r^{-p}. \f] There is also a spherical
-    clipping region around the origin determined by a radius \f$r_0 \gt 0\f$ where the density is made 
-    zero to cut out the singularity. */
+/** The abstract SphePowerLawRedistributeGeometryDecorator class implements a decorator that adjusts
+    another geometry by multiplying the density with a spherical power law weight function \f[
+    \rho'(r, \theta, \phi) = n \rho(r, \theta, \phi) r^{-p}. \f] There is also a spherical clipping
+    region around the origin determined by a radius \f$r_0 \gt 0\f$ where the density is made zero
+    to cut out the singularity. */
 class SphePowerLawRedistributeGeometryDecorator : public RedistributeGeometryDecorator
 {
     ITEM_CONCRETE(SphePowerLawRedistributeGeometryDecorator, RedistributeGeometryDecorator,
@@ -40,8 +40,8 @@ protected:
     /** The weight function is the power law: \f$r^{-p}\f$. */
     double weight(Position bfr) const override;
 
-    /** The max weight is used in the rejection method and is equal to \f$r_0^{-p}\f$ 
-        with \f$r_0\gt 0\f$ the radius of the clipping. */
+    /** The max weight, used in the rejection method, is equal to \f$r_0^{-p}\f$ 
+        with \f$r_0\gt 0\f$ the radius of the clipping sphere. */
     double maxWeight() const override;
 };
 

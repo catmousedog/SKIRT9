@@ -11,20 +11,20 @@
 
 ////////////////////////////////////////////////////////////////////
 
-/** The abstract AxExpRedistributeGeometryDecorator class implements a decorator that 
-    adjusts another geometry by multiplying the density with an axial exponential weight function 
-    \f[ \rho'(r, \phi, z) = n \rho(R, \phi, z) \exp{(-R\, L_R)}\exp{(-z\, L_z)}. \f] */
+/** The abstract AxExpRedistributeGeometryDecorator class implements a decorator that adjusts
+    another geometry by multiplying the density with an axial exponential weight function \f[
+    \rho'(r, \phi, z) = n \rho(R, \phi, z) \exp{\left(-\frac{R}{L_R}-\frac{z}{L_z}\right)}. \f] */
 class AxExpRedistributeGeometryDecorator : public RedistributeGeometryDecorator
 {
     ITEM_CONCRETE(AxExpRedistributeGeometryDecorator, RedistributeGeometryDecorator,
                   "a decorator that redistributes another geometry with an axial power law")
         ATTRIBUTE_TYPE_INSERT(AxExpRedistributeGeometryDecorator, "Dimension2")
 
-        PROPERTY_DOUBLE(RScaleLength, "the negative power of the radial part of the weight function")
+        PROPERTY_DOUBLE(RScaleLength, "the scale length in the radial direction")
         ATTRIBUTE_QUANTITY(RScaleLength, "length")
         ATTRIBUTE_MIN_VALUE(RScaleLength, "[0")
 
-        PROPERTY_DOUBLE(zScaleLength, "the negative power of the vertical part of the weight function")
+        PROPERTY_DOUBLE(zScaleLength, "the scale length in the vertical direction")
         ATTRIBUTE_QUANTITY(zScaleLength, "length")
         ATTRIBUTE_MIN_VALUE(zScaleLength, "[0")
 
@@ -38,10 +38,11 @@ public:
     int dimension() const override;
 
 protected:
-    /** The weight function is the power law: \f$\exp{-L_R\, R}\exp{-L_z\, z}\f$. */
+    /** The weight function is the exponential:
+        \f$\exp{\left(-\frac{R}{L_R}-\frac{z}{L_z}\right)}\f$. */
     double weight(Position bfr) const override;
 
-    /** The max weight is used in the rejection method and is equal to \f$1$. */
+    /** The max weight, used in the rejection method, is equal to \f$1\f$. */
     double maxWeight() const override;
 
     //======================== Data Members ========================

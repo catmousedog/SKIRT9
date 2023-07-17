@@ -13,7 +13,14 @@ void RedistributeGeometryDecorator::setupSelfAfter()
 {
     Geometry::setupSelfAfter();
 
-    _norm = norm();
+    int Nsamples = 10000;
+    double sum = 0.;
+    for (int k = 0; k < Nsamples; k++)
+    {
+        Position bfr = _geometry->generatePosition();
+        sum += weight(bfr);
+    }
+    _norm = Nsamples / sum;
     _maxWeight = maxWeight();
 }
 
@@ -55,20 +62,6 @@ double RedistributeGeometryDecorator::SigmaY() const
 double RedistributeGeometryDecorator::SigmaZ() const
 {
     return _geometry->SigmaZ();
-}
-
-////////////////////////////////////////////////////////////////////
-
-double RedistributeGeometryDecorator::norm() const
-{
-    int Nsamples = 10000;
-    double sum = 0.;
-    for (int k = 0; k < Nsamples; k++)
-    {
-        Position bfr = _geometry->generatePosition();
-        sum += weight(bfr);
-    }
-    return Nsamples / sum;
 }
 
 ////////////////////////////////////////////////////////////////////

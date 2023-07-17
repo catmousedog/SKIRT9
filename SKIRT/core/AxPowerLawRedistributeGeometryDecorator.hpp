@@ -11,13 +11,14 @@
 
 ////////////////////////////////////////////////////////////////////
 
-/** The abstract AxPowerLawRedistributeGeometryDecorator class implements a decorator that 
-    adjusts another geometry by multiplying the density with an axial power law weight function 
-    \f[ \rho'(r, \phi, z) = n \rho(R, \phi, z) R^{-p_R}z^{-p_z}. \f] There are also two clipping
-    clipping regions, one around the z-axis determined by a radius \f$R_0\f$ and one above
-    and below the xy-plane with a height \f$z_0\f$, where the density is made zero to cut
-    out the singularity. If an exponent is made zero, then the clipping region for that exponent
-    can also be made zero. */
+/** The abstract AxPowerLawRedistributeGeometryDecorator class implements a decorator that adjusts
+    another geometry by multiplying the density with an axial power law weight function \f[ \rho'(r,
+    \phi, z) = n \rho(R, \phi, z) R^{-p_R}z^{-p_z}. \f] There are also two clipping clipping
+    regions, one around the z-axis determined by a radius \f$R_0\f$ and one above and below the
+    xy-plane determined by $z=\pm z_0$, where the density is made zero to cut out the singularity.
+    If an exponent is chosen to be zero, then the clipping region for that exponent will
+    automatically be made zero.
+    */
 class AxPowerLawRedistributeGeometryDecorator : public RedistributeGeometryDecorator
 {
     ITEM_CONCRETE(AxPowerLawRedistributeGeometryDecorator, RedistributeGeometryDecorator,
@@ -27,7 +28,7 @@ class AxPowerLawRedistributeGeometryDecorator : public RedistributeGeometryDecor
         PROPERTY_DOUBLE(RExponent, "the negative power of the radial part of the weight function")
         ATTRIBUTE_MIN_VALUE(RExponent, "[0")
 
-        PROPERTY_DOUBLE(zExponent, "the negative power of the z-part of the weight function")
+        PROPERTY_DOUBLE(zExponent, "the negative power of the vertical part of the weight function")
         ATTRIBUTE_MIN_VALUE(zExponent, "[0")
 
         PROPERTY_DOUBLE(minR, "the radius of the clipping cylinder around the z-axis")
@@ -44,17 +45,16 @@ class AxPowerLawRedistributeGeometryDecorator : public RedistributeGeometryDecor
 
     //======================== Other Functions =======================
 public:
-    /** The dimension of the geometry after applying the decorator can only change
-        spherical geometries into axially symmetric, otherwise it doesn't change the
-        dimension. */
+    /** The dimension of the geometry after applying the decorator can only change spherical
+        geometries into axially symmetric, otherwise it doesn't change the dimension. */
     int dimension() const override;
 
 protected:
-    /** The weight function is the exponential: \f$R^{-p_R}z^{-p_z}\f$. */
+    /** The weight function is the power law: \f$R^{-p_R}z^{-p_z}\f$. */
     double weight(Position bfr) const override;
 
-    /** The max weight is used in the rejection method and is equal to 
-         \f$R_0^{-p_R}z_0^{-p_z}\f$. */
+    /** The max weight is used in the rejection method and is equal to \f$R_0^{-p_R}z_0^{-p_z}\f$.
+         */
     double maxWeight() const override;
 
     //======================== Data Members ========================
