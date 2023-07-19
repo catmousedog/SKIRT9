@@ -8,6 +8,7 @@
 
 #include "SimulationItem.hpp"
 class TreeNode;
+class NestedDensityTreePolicy;
 
 //////////////////////////////////////////////////////////////////////
 
@@ -58,6 +59,9 @@ public:
         neighbors with the largest overlapping border area are listed first, increasing (on
         average) the probability of locating the correct neighbor early in the list. */
     virtual vector<TreeNode*> constructTree(TreeNode* root) = 0;
+
+    // the NestedDensityTreePolicy needs to change the minLevel and maxLevel
+    friend NestedDensityTreePolicy;
 };
 
 //////////////////////////////////////////////////////////////////////
