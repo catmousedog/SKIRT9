@@ -19,12 +19,7 @@ void NestedDensityTreePolicy::setupSelfBefore()
     auto grid = ms->find<TreeSpatialGrid>(false);
     Box _outer = grid->boundingBox();
 
-    if (_inner.xmin() <= _outer.xmin()) throw FATALERROR("The inner min x is outside the outer region");
-    if (_inner.ymin() <= _outer.ymin()) throw FATALERROR("The inner min y is outside the outer region");
-    if (_inner.zmin() <= _outer.zmin()) throw FATALERROR("The inner min z is outside the outer region");
-    if (_inner.xmax() >= _outer.xmax()) throw FATALERROR("The inner max x is outside the outer region");
-    if (_inner.ymax() >= _outer.ymax()) throw FATALERROR("The inner max y is outside the outer region");
-    if (_inner.zmax() >= _outer.zmax()) throw FATALERROR("The inner max z is outside the outer region");
+    if (!_outer.contains(_inner)) throw FATALERROR("The nested density tree is not contained in the outer region");
 
     _baseMinLevel = _minLevel;
     _baseMaxLevel = _maxLevel;
@@ -40,7 +35,7 @@ void NestedDensityTreePolicy::setupSelfAfter()
 
 bool NestedDensityTreePolicy::needsSubdivide(TreeNode* node, int level)
 {
-    if (_inner.contains(node->center()))
+    if (_inner.intersects(node->extent()))
     {
         if (level < _nestedTree->_minLevel) return true;
         if (level >= _nestedTree->_maxLevel) return false;

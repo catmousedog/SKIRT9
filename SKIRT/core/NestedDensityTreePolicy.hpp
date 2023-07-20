@@ -18,11 +18,19 @@
     also a DensityTreePolicy. The nestedTree property decides the properties of the inner region.
 
     The nestedTree property can also be another NestedDensityTreePolicy, allowing for recursive
-    nesting. */
+    nesting. 
+
+    When determining whether a TreeNode intersects with the inner 'nested' region, if it does, the
+    node will be subdivided. This can result in a smooth transition, as larger TreeNodes may only
+    need to subdivide once or a few times, making them no longer intersect with the inner region.
+    Boxes that just intersect the inner region, especially at the edge, will only subdivide a few
+    times before they no longer intersect, providing a relatively smooth transition from the outer
+    to inner region. */
 class NestedDensityTreePolicy : public DensityTreePolicy
 {
     ITEM_CONCRETE(NestedDensityTreePolicy, DensityTreePolicy,
                   "a tree grid construction policy using a nested density tree policy")
+        ATTRIBUTE_TYPE_DISPLAYED_IF(NestedDensityTreePolicy, "Level2")
 
         PROPERTY_DOUBLE(minXInner, "the start point of the inner box in the X direction")
         ATTRIBUTE_QUANTITY(minXInner, "length")
@@ -63,10 +71,10 @@ protected:
 
 public:
     /** This function determines whether a given node needs to be subdivided for a given level. If
-        the node is inside the inner region, the level must lie between the minLevel and maxLevel of
-        the inner region. If the node is not within the inner region, it will use the baseMinLevel
-        and baseMaxLevel as bounds. If the node is within all the refinement bounds then it will use
-        the needsSubdidive function of the corresponding DensityTreePolicy. */
+        the node intersects with the inner region, the level must lie between the minLevel and
+        maxLevel of the inner region. If the node is not within the inner region, it will use the
+        baseMinLevel and baseMaxLevel as bounds. If the node is within all the refinement bounds
+        then it will use the needsSubdidive function of the corresponding DensityTreePolicy. */
     bool needsSubdivide(TreeNode* node, int level) override;
 
     //======================== Data Members ========================
