@@ -13,7 +13,7 @@ double TwistFreeWarpGeometryDecorator::density(Position bfr) const
     double R, phi, z;
     bfr.cylindrical(R, phi, z);
 
-    if (R > _maxRadius) return 0;
+    if (R > _R0) return 0;
 
     return _geometry->density(Position(R, phi, z - warpHeight(R, phi), Position::CoordinateSystem::CYLINDRICAL));
 }
@@ -23,6 +23,7 @@ double TwistFreeWarpGeometryDecorator::density(Position bfr) const
 Position TwistFreeWarpGeometryDecorator::generatePosition() const
 {
     Position bfr;
+
     double R, phi, z;
     do
     {
@@ -30,7 +31,11 @@ Position TwistFreeWarpGeometryDecorator::generatePosition() const
         bfr.cylindrical(R, phi, z);
     } while (R > _maxRadius);
 
-    return Position(R, phi, z + warpHeight(R, phi), Position::CoordinateSystem::CYLINDRICAL);
+    double x, y;
+    bfr.cartesian(x, y, z);
+    bfr.set(x, y, z + warpHeight(R, phi));
+
+    return bfr;
 }
 
 ////////////////////////////////////////////////////////////////////
@@ -58,7 +63,7 @@ double TwistFreeWarpGeometryDecorator::SigmaZ() const
 
 double TwistFreeWarpGeometryDecorator::warpHeight(double R, double phi) const
 {
-    return _maxWarpHeight * pow(R / _maxRadius, _warpPower) * cos(phi);
+    return _H * pow(R / _R0, _b) * cos(phi);
 }
 
 ////////////////////////////////////////////////////////////////////

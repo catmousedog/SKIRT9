@@ -11,9 +11,9 @@
 ////////////////////////////////////////////////////////////////////
 
 /** The TwistedWarpGeometryDecorator class is a geometry decorator that warps any geometry. The warp
-    only shifts the z-coordinate by \f[ h(R,\phi) = \frac{2H}{\pi} \sqrt{10\frac{R}{R_0}}
-    \sin\left(\sqrt{10\frac{R}{R_0}}\right) \cos\left(\phi\right). \f] Here \f$H\f$ is the max warp
-    height and \f$R_0\f$ the max radius, outside of which the density is 0. Since this decorator
+    only shifts the z-coordinate by \f[ h(R,\phi) = \frac{2H}{\pi} \pi\sqrt{\frac{R}{R_0}}
+    \sin\left(\pi\sqrt{\frac{R}{R_0}}\right) \cos\left(\phi\right). \f] Here \f$H\f$ is the max warp
+    height and \f$R_0\f$ the max radius, outside of which the warp becomes 0. Since this decorator
     only shifts the \f$z\f$-cooridnate the random point sampling and density evaluation comes down
     to just applying the warp to the points. */
 class TwistedWarpGeometryDecorator : public GenGeometry
@@ -37,7 +37,7 @@ class TwistedWarpGeometryDecorator : public GenGeometry
 public:
     /** This function returns the density \f$\rho({\bf{r}})\f$ at the position \f${\bf{r}}\f$. It
         applies the inverse warp back to the original density distribution and evaluates the
-        density. The density for \f$R\gt R_0\f$ is 0. */
+        density. The density for \f$R\gt R_0\f$ is unaltered. */
     double density(Position bfr) const override;
 
     /** This function generates a random position from the geometry by drawing a random point from

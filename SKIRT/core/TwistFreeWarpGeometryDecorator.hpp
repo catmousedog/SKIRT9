@@ -10,15 +10,16 @@
 
 ////////////////////////////////////////////////////////////////////
 
-/** The TwistedWarpGeometryDecorator class is a geometry decorator that warps any geometry. The warp
-    only shifts the z-coordinate by \f[ h(R,\phi) = H\left(\frac{R}{R_0}\right)^b
+/** The TwistFreeWarpGeometryDecorator class is a geometry decorator that warps any geometry. The
+    warp only shifts the z-coordinate by \f[ h(R,\phi) = H\left(\frac{R}{R_0}\right)^b
     \cos\left(\phi\right). \f] Here \f$H\f$ is the max warp height, \f$b\f$ is the radial warp power
-    and \f$R_0\f$ the max radius, outside of which the density is 0. Since this decorator only
-    shifts the \f$z\f$-cooridnate the random point sampling and density evaluation comes down to
-    just applying the warp to the points. */
+    and \f$R_0\f$ the max radius, outside of which the density is 0. Since this
+    decorator only shifts the \f$z\f$-cooridnate the random point sampling and density evaluation
+    comes down to just applying the warp to the points. */
 class TwistFreeWarpGeometryDecorator : public GenGeometry
 {
-    ITEM_CONCRETE(TwistFreeWarpGeometryDecorator, GenGeometry, "a decorator that applies a twist-free warp to any geometry")
+    ITEM_CONCRETE(TwistFreeWarpGeometryDecorator, GenGeometry,
+                  "a decorator that applies a twist-free warp to any geometry")
 
         PROPERTY_ITEM(geometry, Geometry, "the general geometry to be warped")
 
@@ -26,12 +27,13 @@ class TwistFreeWarpGeometryDecorator : public GenGeometry
         ATTRIBUTE_QUANTITY(maxRadius, "length")
         ATTRIBUTE_MIN_VALUE(maxRadius, "]0")
 
-        PROPERTY_DOUBLE(maxWarpHeight, "the max height of the warp")
+        PROPERTY_DOUBLE(maxWarpHeight, "the max height of the warp above the xy plane")
         ATTRIBUTE_QUANTITY(maxWarpHeight, "length")
         ATTRIBUTE_MIN_VALUE(maxWarpHeight, "[0")
 
         PROPERTY_DOUBLE(warpPower, "the power of the radial warp")
         ATTRIBUTE_MIN_VALUE(warpPower, "]0")
+
     ITEM_END()
 
     //======================== Other Functions =======================
@@ -71,6 +73,18 @@ private:
      * \f$h(R,\phi)\f$. */
     double warpHeight(double R, double phi) const;
 
+    //======================== Data Members ========================
+
+private:
+    // aliases to discoverable data members for ease of notation and backwards compatibility
+    const double& _R0{_maxRadius};
+    double& _H{_maxWarpHeight};
+    const double& _b{_warpPower};
+
+    // data members initialized during setup
+    double _theta{0.};
+    double _c{0.};
+    double _s{1.};
 };
 
 ////////////////////////////////////////////////////////////////////
