@@ -17,7 +17,7 @@
 class AxExpRedistributeGeometryDecorator : public RedistributeGeometryDecorator
 {
     ITEM_CONCRETE(AxExpRedistributeGeometryDecorator, RedistributeGeometryDecorator,
-                  "a decorator that redistributes another geometry with an axial power law")
+                  "a decorator that redistributes another geometry with an axial exponential")
         ATTRIBUTE_TYPE_INSERT(AxExpRedistributeGeometryDecorator, "Dimension2")
 
         PROPERTY_DOUBLE(RScaleLength, "the scale length in the radial direction")
