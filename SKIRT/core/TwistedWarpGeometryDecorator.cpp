@@ -55,7 +55,7 @@ double TwistedWarpGeometryDecorator::warpHeight(double R, double phi) const
 {
     if (R > _maxRadius) return 0;
     double u = M_PI * sqrt(R / _maxRadius);
-    return 0.54956817366 * _maxWarpHeight * u * sin(u) * cos(phi - u);
+    return 0.549541133154 * _maxWarpHeight * u * sin(u) * cos(phi - u);
 }
 
 ////////////////////////////////////////////////////////////////////
